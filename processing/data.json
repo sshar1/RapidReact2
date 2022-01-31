@@ -1,0 +1,28 @@
+{
+    "cargo": { 
+        "hsv_blue": {
+            "lower": [86, 77, 25],
+            "upper": [114, 255, 255]
+        },
+        "hsv_red1": {
+            "lower": [0, 100, 20],
+            "upper": [10, 255, 255]
+        },
+        "hsv_red2": {
+            "lower": [160, 100, 20],
+            "upper": [180, 255, 255]
+        }
+    },
+
+    "tape": {
+        "bgr_black": {
+            "lower": [0, 0, 0],
+            "upper": [50, 50, 50]
+        }
+    },
+
+    "dimensions": {
+        "LENGTH": 640,
+        "WIDTH": 480
+    }
+}

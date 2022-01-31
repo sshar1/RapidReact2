@@ -1,0 +1,56 @@
+<html>
+    <head>
+
+        <title style = "font-family: 'Courier New', Courier, monospace">Shadow Line</title>
+
+        <script type = 'text/javascript'>
+            var wsC = null;
+
+            function init(){
+                if("WebSocket" in window){
+                    wsC = new WebSocket("ws://localhost:1234/line/ws/");
+                    
+                    wsC.onopen = function(){
+                        console.log("line connection opened");
+                    }
+
+                    wsC.onclose = function(){
+                        console.log("line connection closed ")
+                        clearInterval(createInterval);
+                    }
+
+                    wsC.onmessage = function(msg){
+                        document.getElementById("frame").src = "data:image/png;base64, " + msg.data;
+                    }
+
+                }else{
+                    console.log("no websocket");
+                }
+
+            }
+
+            function send(){
+                wsC.send("message");
+            }
+            
+            function change(){
+                clearInterval(createInterval)
+            }
+        </script>
+
+    </head>
+    <body onload = "init();" style = "font-family: 'Courier New', Courier, monospace">
+        <h1> Shadow Line Detector </h1>
+
+        <img id = "frame" src = ""><br>
+
+        <a href = "/"><button onclick = "change();">cargo</button></a>
+
+
+        <script>
+            var createInterval = setInterval(send, 30)
+        </script>
+
+    </body>
+
+</html>
