@@ -109,21 +109,8 @@ def detectCargo(frame, message):
     elif message == "both":
         drawRect(createRedMask(editImage(frame)), frame, "red")
         drawRect(createBlueMask(editImage(frame)), frame, "blue")
-    
-    #show windows
-    # cv.imshow("blue mask", createBlueMask(editImage(frame)))
-    # cv.imshow("red mask", createRedMask(editImage(frame)))
-    # cv.imshow("Frame", frame)
 
     return frame
-
-while True:
-    _, frame = camera.read()
-    detectCargo(frame, "both")
-
-    # #break loop if key pressed
-    if cv.waitKey(1) & 0xFF is ord('q'):
-        break
     
 camera.release()
 cv.destroyAllWindows()

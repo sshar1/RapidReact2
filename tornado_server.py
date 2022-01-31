@@ -1,5 +1,4 @@
 # Writing the Tornado server to initiate the client request
-
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
@@ -12,8 +11,7 @@ from processing.img_to_str import to_b64
 from tornado.options import define, options
 
 # Websocket defined with port 2601
-define('port', default = 1234, type=int)
-
+define('port', default = 2601, type = int)
 cap = cv.VideoCapture(source, cv.CAP_DSHOW)
 
 # LIGHTING: -1 for internal camera, -7 for FISHEYE, -4 for Microsoft HD-3000

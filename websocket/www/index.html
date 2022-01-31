@@ -5,7 +5,7 @@
     var ws = null;
     function init() {
         if ("WebSocket" in window) {
-            ws = new WebSocket("ws://localhost:1234/ws/");
+            ws = new WebSocket("ws://100.99.64.177:2601/ws/");
             ws.onopen = function() {
                 console.log("Connection is opened");
             }
