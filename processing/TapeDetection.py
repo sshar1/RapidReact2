@@ -17,14 +17,14 @@ def blurAndGrayImage(frame):
     frame = cv.GaussianBlur(frame, (3, 3), 0)
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
-    return frame, gray
+    return gray
 
 def sobel_edge(frame):
     depth = cv.CV_16S
     scale = 1
     delta = 0
 
-    frame, gray = blurAndGrayImage(frame)
+    gray = blurAndGrayImage(frame)
 
     # Sobel edge detection
     grad_x = cv.Sobel(gray, depth, 1, 0, ksize = 3, scale = scale, delta = delta, borderType = cv.BORDER_DEFAULT)
@@ -42,8 +42,7 @@ def laplace_edge(frame):
     ddepth = cv.CV_16S
     kernel_size = 3
 
-    src = cv.GaussianBlur(frame, (3, 3), 0)
-    src_gray = cv.cvtColor(src, cv.COLOR_BGR2GRAY)
+    src_gray = blurAndGrayImage(frame)
 
     # Laplacian Edge Detection
     dst = cv.Laplacian(src_gray, ddepth, ksize = kernel_size)
@@ -52,6 +51,7 @@ def laplace_edge(frame):
     return abs_dst
 
 def isRect(cnt, approx, ar):
+    # 4 sides, more than 500 pixels, not a square
     return len(approx) == 4 and cv.contourArea(cnt) > MIN_AREA and not (0.8 <= ar <= 1.2)
 
 def maskColor(frame):
@@ -64,24 +64,29 @@ def maskColor(frame):
 def findRect(frame, output):
     contours, _ = cv.findContours(frame, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 
-    for(_, contour) in enumerate(contours):
+    for (_, contour) in enumerate(contours):
         peri = cv.arcLength(contour, True)
         approx = cv.approxPolyDP(contour, 0.01 * peri, True)
+
         x,y,w,h = cv.boundingRect(approx)
         aspect_ratio = w / h
         
         if isRect(contour, approx, aspect_ratio):
-            cv.rectangle(output, (x,y), (x+w, y+h), (0,255,255))
+            cv.rectangle(output, (x, y), (x + w, y + h), (0, 255, 255))
 
+            # Draw line on rectangle
             _, cols = frame.shape[:2]
-            [vx, vy,x,y] = cv.fitLine(contour, cv.DIST_L2,0,0.01,0.01)
-            lefty = int((-x*vy/vx) + y)
-            righty = int(((cols-x)*vy/vx)+y)
-            p1 = (cols-1, righty)
+            [vx, vy, x, y] = cv.fitLine(contour, cv.DIST_L2, 0, 0.01, 0.01)
+
+            lefty = int((-x * vy / vx) + y)
+            righty = int(((cols - x) * vy / vx) + y)
+
+            p1 = (cols - 1, righty)
             p2 = (0, lefty)
 
             cv.line(output, p1,p2,(0,0,255),2)
             print(get_angle(p1, p2))
+
             cv.putText(output, f"{str(get_angle(p1,p2))} degrees", (int(x), int(y-10)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255)) 
 
 def get_angle(p1, p2):
