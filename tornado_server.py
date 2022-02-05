@@ -4,7 +4,7 @@ import tornado.web
 import tornado.websocket
 import cv2 as cv
 
-from processing.CargoDetection import detectCargo, source
+from processing.CargoDetection import detectCargo, source, sendData
 from processing.TapeDetection import detect_line
 from processing.img_to_str import to_b64
 
@@ -28,18 +28,39 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self, *args):
         print('new cargo connection!')
 
-    # function to respond to a message on the WebSocket
     def on_message(self, message):
         _, frame = cap.read()
         
-        # enter open cv code here
         output_image = detectCargo(frame, message)
-        cv.imwrite("./websocket/frame.jpg", output_image)
+        cv.imwrite("./websocket/cargoFrame.jpg", output_image)
 
-        self.write_message(to_b64("./websocket/frame.jpg"))
+        self.write_message(to_b64("./websocket/cargoFrame.jpg"))
 
     def on_close(self):
         print('connection closed')
+
+
+class DataHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("./websocket/www/data.html")
+
+class DataSocketHander(tornado.websocket.WebSocketHandler):
+    def open(self, *args):
+        print('Data websocket connection')
+    
+    def on_message(self, message):
+        _, frame = cap.read()
+
+        output_image = detectCargo(frame, message)
+        cv.imwrite("./websocket/dataFrame.jpg", output_image)
+
+        #self.write_message(to_b64("./websocket/dataFrame.jpg"), sendData(frame, message))
+        #self.write_message(to_b64("./websocket/dataFrame.jpg"))
+        self.write_message(sendData(frame, message))
+
+    def on_close(self):
+        print('connection closed')
+
 
 class ShadowHandler(tornado.web.RequestHandler):
     def get(self):
@@ -51,19 +72,23 @@ class ShadowSocketHandler(tornado.websocket.WebSocketHandler):
     
     def on_message(self, message):
         _, frame = cap.read()
-        output_image = detect_line(frame)
-        cv.imwrite("./websocket/line.jpg", output_image)
-        self.write_message(to_b64("./websocket/line.jpg"))
 
+        output_image = detect_line(frame)
+        cv.imwrite("./websocket/lineFrame.jpg", output_image)
+
+        self.write_message(to_b64("./websocket/lineFrame.jpg"))
 
     def on_close(self):
         print('connection closed')
+
 
 app = tornado.web.Application([
     (r'/', IndexHandler),
     (r'/ws/', WebSocketHandler),
     (r'/line/', ShadowHandler),
-    (r'/line/ws/', ShadowSocketHandler)
+    (r'/line/ws/', ShadowSocketHandler),
+    (r'/data/', DataHandler),
+    (r'/data/ws/', DataSocketHander)
 ])
 
 if __name__ == '__main__':

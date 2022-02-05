@@ -23,6 +23,7 @@
 
     "dimensions": {
         "LENGTH": 640,
-        "WIDTH": 480
+        "WIDTH": 480,
+        "FOCAL_LENGTH": 630
     }
 }

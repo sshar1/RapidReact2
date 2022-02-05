@@ -7,8 +7,8 @@
             var wsC = null;
 
             function init(){
-                if("WebSocket" in window){
-                    wsC = new WebSocket("ws://100.99.64.177:2601/line/ws/");
+                if ("WebSocket" in window) {
+                    wsC = new WebSocket("ws://localhost:2601/line/ws/");
                     
                     wsC.onopen = function(){
                         console.log("line connection opened");
@@ -23,7 +23,7 @@
                         document.getElementById("frame").src = "data:image/png;base64, " + msg.data;
                     }
 
-                }else{
+                } else{
                     console.log("no websocket");
                 }
 
@@ -44,8 +44,8 @@
 
         <img id = "frame" src = ""><br>
 
-        <a href = "/"><button onclick = "change();">cargo</button></a>
-
+        <a href = "/"><button onclick = "change();">Cargo</button></a>
+        <a href = "/data/"><button onclick = "change();">Data</button></a>
 
         <script>
             var createInterval = setInterval(send, 30)

@@ -5,7 +5,7 @@
     var ws = null;
     function init() {
         if ("WebSocket" in window) {
-            ws = new WebSocket("ws://100.99.64.177:2601/ws/");
+            ws = new WebSocket("ws://localhost:2601/ws/");
             ws.onopen = function() {
                 console.log("Connection is opened");
             }
@@ -34,17 +34,22 @@
     <div id = "mask" style = "text-align: center; font-family: 'Courier New', Courier, monospace">
         <h2>Select Mask</h2>
         <select id = "color" style = "border-radius: 7px; font-size: 20px">
-            <option value = "none">none</option>
-            <option value = "red">red</option>
-            <option value = "blue">blue</option>
-            <option value = "both">both</option>
+            <option value = "None">None</option>
+            <option value = "Red">Red</option>
+            <option value = "Blue">Blue</option>
+            <option value = "Both">Both</option>
         </select>
-        <a href = "/line/" ><button onclick="change();" style = "font-family: 'Courier New', Courier, monospace">line</button></a>
+        <a href = "/line/" ><button onclick="change();" style = "font-family: 'Courier New', Courier, monospace">Line</button></a>
+        <a href = "/data/" ><button onclick="change();" style = "font-family: 'Courier New', Courier, monospace">Data</button></a>
+
         <h3>Response:</h3>
         <img id = "frame" src = ""><br>
     </div>
-
-        <!-- <a href = "/line/" ><button onclick="change();">line</button></a>
+<!--
+    <div id = "biggest" style = "border-radius: 7px; font-size: 20px">
+        <h2>Closest Cargo</h2>
+        <p id = "cords">Coordinates: </p>
+        <p id = "centerDist">Distance from center: </p>
     </div> -->
 
     <script>

@@ -7,7 +7,7 @@ import json
 f = open("processing/data.json") 
 data = json.load(f)
 
-source = 1 
+source = 1
 camera = cv.VideoCapture(source, cv.CAP_DSHOW)
 camera.set(cv.CAP_PROP_EXPOSURE, -7) # change to -1 for internal camera, -7 for FISHEYE, -4 for Microsoft hd3000
 

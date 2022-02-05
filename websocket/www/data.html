@@ -1,0 +1,89 @@
+<html>
+<head>
+    <title>Data</title>
+    <script type="text/javascript">
+    var ws = null;
+    function init() {
+        if ("WebSocket" in window) {
+            ws = new WebSocket("ws://localhost:2601/data/ws/");
+            ws.onopen = function() {
+                console.log("Data connection is opened");
+            }
+
+            ws.onclose = function() {
+                console.log("Connection is closed");
+                clearInterval(createInterval);
+            }
+
+            ws.onmessage = function(msg) {
+
+                cargoData = JSON.parse(msg.data);
+
+                redData = cargoData['red'];
+                blueData = cargoData['blue'];
+
+                /*
+                console.log("Cords: " + blueData['x'] + ", " + blueData['y']);
+                console.log('Center Dist: ' + blueData['center']);
+                console.log('Distance: ' + blueData['dist']);
+                console.log('Angle: ' + blueData['angle']) */
+
+                document.getElementById("cordsRed").innerHTML = "Coordinates: (" + redData['x'] + ", " + redData['y'] +")";
+                document.getElementById("centerDistRed").innerHTML = "Distance from center: (" + redData['centerX'] + ", " + redData['centerY'] + ")";
+                document.getElementById("distanceRed").innerHTML = "Distance from camera: " + redData['dist'] + ' meters';
+                document.getElementById("angleRed").innerHTML = "Angle: " + redData['angle'];
+                
+                document.getElementById("cordsBlue").innerHTML = "Coordinates: (" + blueData['x'] + ", " + blueData['y'] + ")";
+                document.getElementById("centerDistBlue").innerHTML = "Distance from center: (" + blueData['centerX'] + ", " + blueData['centerY'] + ")";
+                document.getElementById("distanceBlue").innerHTML = "Distance from camera: " + blueData['dist'] + ' meters';
+                document.getElementById("angleBlue").innerHTML = "Angle: " + blueData['angle']; 
+            }    
+
+        } else {
+            console.log("Your browser doesn't support WebSocket!");
+        }
+    }
+    function send() {
+        ws.send(document.getElementById("color").value);
+    }
+
+    function change(){
+        clearInterval(createInterval);
+    }
+    </script>
+
+</head>
+<body onload="init();">
+    <div id = "mask" style = "text-align: center; font-family: 'Courier New', Courier, monospace">
+        <h2>Select Mask</h2>
+        <select id = "color" style = "border-radius: 7px; font-size: 20px">
+            <option value = "None">None</option>
+            <option value = "Red">Red</option>
+            <option value = "Blue">Blue</option>
+            <option value = "Both">Both</option>
+        </select>
+
+        <a href = "/" ><button onclick="change();" style = "font-family: 'Courier New', Courier, monospace">Cargo</button></a>
+        <a href = "/line/" ><button onclick="change();" style = "font-family: 'Courier New', Courier, monospace">Line</button></a>
+
+    </div>
+
+    <div id = "biggest" style = "border-radius: 7px; font-size: 20px">
+        <h2>Closest Red Cargo</h2>
+        <p id = "cordsRed">Coordinates: </p>
+        <p id = "centerDistRed">Distance from center: </p>
+        <p id = "distanceRed">Distance from camera: </p>
+        <p id = "angleRed">Angle: </p>
+
+        <h2>Closest Blue Cargo</h2>
+        <p id = "cordsBlue">Coordinates: </p>
+        <p id = "centerDistBlue">Distance from center: </p>
+        <p id = "distanceBlue">Distance from camera: </p>
+        <p id = "angleBlue">Angle: </p>
+    </div>
+
+    <script>
+        var createInterval = setInterval(send, 30)
+    </script>
+</body>
+</html>
