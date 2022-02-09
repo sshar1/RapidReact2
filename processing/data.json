@@ -1,5 +1,20 @@
 {
-    "cargo": { 
+    "cargo" : {
+		"hsv_blue" : {
+            "lower" : [85, 100, 0],
+            "upper" : [151, 255, 255]
+        },
+        "hsv_red1" : {
+            "lower" : [0, 0, 0],
+            "upper" : [19, 255, 255]
+        },
+        "hsv_red2" : {
+            "lower" : [160, 0, 0],
+            "upper" : [180, 255, 255]
+        }
+    },
+
+    "cargoFisheye": { 
         "hsv_blue": {
             "lower": [86, 77, 25],
             "upper": [114, 255, 255]
@@ -12,7 +27,7 @@
             "lower": [160, 100, 20],
             "upper": [180, 255, 255]
         }
-    },
+    }, 
 
     "tape": {
         "bgr_black": {
@@ -23,7 +38,6 @@
 
     "dimensions": {
         "LENGTH": 640,
-        "WIDTH": 480,
-        "FOCAL_LENGTH": 630
+        "WIDTH": 480
     }
 }

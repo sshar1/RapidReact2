@@ -54,8 +54,6 @@ class DataSocketHander(tornado.websocket.WebSocketHandler):
         output_image = detectCargo(frame, message)
         cv.imwrite("./websocket/dataFrame.jpg", output_image)
 
-        #self.write_message(to_b64("./websocket/dataFrame.jpg"), sendData(frame, message))
-        #self.write_message(to_b64("./websocket/dataFrame.jpg"))
         self.write_message(sendData(frame, message))
 
     def on_close(self):
